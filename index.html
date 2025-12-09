@@ -5,69 +5,121 @@
 <title>Excellent Studies ZA | Book a Session</title>
 
 <style>
+
 body{
   background:#fff;
   font-family:Arial, sans-serif;
   padding:20px;
 }
+
 .container{
   max-width:750px;
   background:black;
   color:white;
   margin:auto;
   padding:30px;
-  border-radius:12px;
+  border-radius:14px;
 }
-h1{text-align:center;margin-bottom:5px;}
-.tagline{text-align:center;font-size:14px;opacity:0.9;}
 
-label{display:block;font-weight:bold;margin-top:10px;}
-input,select,textarea{
+h1{
+  text-align:center;
+  margin-bottom:4px;
+}
+
+.tagline{
+  text-align:center;
+  font-size:14px;
+  opacity:0.9;
+  margin-bottom:15px;
+}
+
+/* ---------- FORM ---------- */
+
+label{
+  font-weight:bold;
+  display:block;
+  margin-top:8px;
+}
+
+input, select, textarea{
   width:100%;
   padding:8px;
-  margin:6px 0 10px;
+  margin-top:4px;
   border-radius:6px;
   border:none;
+}
+
+textarea{
+  resize:vertical;
 }
 
 button{
-  width:100%;
   background:white;
   color:black;
+  width:100%;
   padding:14px;
   border:none;
-  border-radius:8px;
+  border-radius:12px;
+  font-size:16px;
   font-weight:bold;
   cursor:pointer;
-  font-size:16px;
+  margin-top:12px;
 }
+
+button:hover{
+  background:#ddd;
+}
+
+/* ---------- NAVIGATION ---------- */
 
 .nav{
   text-align:center;
-  margin:12px 0 18px;
+  margin-bottom:20px;
 }
+
 .nav a{
+  display:inline-block;
+  background:white;
+  color:black;
+  padding:10px 18px;
+  margin:5px;
+  border-radius:999px;
+  text-decoration:none;
+  font-weight:bold;
+  letter-spacing:0.5px;
+  transition:all 0.3s ease;
+  box-shadow:0 0 7px rgba(255,255,255,0.5);
+}
+
+.nav a:hover{
+  background:black;
   color:white;
   border:1px solid white;
-  padding:6px 12px;
-  text-decoration:none;
-  border-radius:6px;
-  margin:0 4px;
+  transform:translateY(-3px);
 }
+
+.nav a.active{
+  background:black;
+  color:white;
+  border:2px solid white;
+}
+
+/* ---------- PAYMENT INFO ---------- */
 
 .notice{
   background:#eee;
   color:black;
-  padding:15px;
-  border-radius:10px;
+  padding:16px;
+  border-radius:14px;
   margin-top:20px;
   font-size:14px;
 }
 
 .notice h3{
-  margin-top:0;
   text-align:center;
+  margin-top:0;
 }
+
 </style>
 </head>
 
@@ -76,12 +128,13 @@ button{
 <div class="container">
 
 <h1>📚 Excellent Studies ZA</h1>
-<p class="tagline">Helping students rise from struggle to success</p>
+<div class="tagline">Helping students rise from struggle to success</div>
 
 <div class="nav">
+  <a href="index.html" class="active">Book</a>
   <a href="prices.html">Prices</a>
   <a href="about.html">About</a>
-  <a href="dashboard.html">Admin Dashboard</a>
+  <a href="dashboard.html">Dashboard</a>
 </div>
 
 <form id="bookingForm" onsubmit="submitBooking()">
@@ -94,44 +147,46 @@ button{
 
 <label>Select Subject</label>
 <select id="subject" required>
-  <option value="Mathematics">Mathematics</option>
-  <option value="Mathematical Literacy">Mathematical Literacy</option>
-  <option value="Accounting">Accounting</option>
-  <option value="Business Studies">Business Studies</option>
-  <option value="Physical Science">Physical Science</option>
-  <option value="Geography">Geography</option>
-  <option value="Life Science">Life Science</option>
+  <option>Mathematics</option>
+  <option>Mathematical Literacy</option>
+  <option>Accounting</option>
+  <option>Business Studies</option>
+  <option>Physical Science</option>
+  <option>Geography</option>
+  <option>Life Science</option>
 </select>
 
 <label>Select Package</label>
 <select id="package" required>
-  <option value="Single Session – R110">Single Session – R110</option>
-  <option value="2 Hour Session – R210">2 Hour Session – R210</option>
-  <option value="Monthly Package – R430">Monthly Package – R430</option>
-  <option value="Group Monthly – R2016 (40% OFF)">Group Monthly – R2016 (40% OFF)</option>
-  <option value="University Applications – R210">University Applications – R210</option>
+  <option>Single Session – R110</option>
+  <option>2 Hour Session – R210</option>
+  <option>Monthly Package – R430</option>
+  <option>Group Monthly – R2016 (40% OFF)</option>
+  <option>University Applications – R210</option>
 </select>
 
 <label>Session Date</label>
 <input type="date" id="date" required>
 
-<label>Time</label>
+<label>Session Time</label>
 <input type="time" id="time" required>
 
 <label>Notes (Hours + Grade)</label>
 <textarea id="notes" placeholder="Example: Grade 11 · 2 hours weekly"></textarea>
 
-<button type="submit">✅ SUBMIT BOOKING</button>
+<button>✅ SUBMIT BOOKING</button>
 
 </form>
 
 <div class="notice">
+
 <h3>💳 EFT Payment Details</h3>
 
 <p>
-After submitting your booking, please make payment via **EFT or cash deposit** using the banking details below and email your proof of payment to:
+Please make payment via **EFT or cash deposit** and email your proof of payment to:
+
 <br><br>
-<b>📧 excellent.studies.za@gmail.com</b>
+<b>excellent.studies.za@gmail.com</b>
 </p>
 
 <hr>
@@ -147,11 +202,12 @@ After submitting your booking, please make payment via **EFT or cash deposit** u
 </p>
 
 <p>
-<b>Payment Reference:</b> Student Name + Subject
+<b>Payment Reference:</b><br>
+Student Name + Subject
 </p>
 
 <p style="text-align:center;">
-<i>Bookings are confirmed only once proof of payment has been received.</i>
+<i>Bookings are confirmed once proof of payment has been received.</i>
 </p>
 
 </div>
@@ -159,11 +215,12 @@ After submitting your booking, please make payment via **EFT or cash deposit** u
 </div>
 
 <script>
+
 function submitBooking(){
 
   event.preventDefault();
 
-  const bookingData = {
+  const data = {
     name: document.getElementById("name").value,
     email: document.getElementById("email").value,
     subject: document.getElementById("subject").value,
@@ -173,20 +230,23 @@ function submitBooking(){
     notes: document.getElementById("notes").value
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec",{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify(bookingData)
+  fetch("https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec", {
+     method:"POST",
+     headers:{"Content-Type":"application/json"},
+     body: JSON.stringify(data)
   })
+
   .then(()=>{
-    alert("✅ Your booking has been submitted successfully!\n\nPlease complete your EFT payment using the banking details on this page and email your proof of payment.");
-    document.getElementById("bookingForm").reset();
+     alert("✅ Your booking has been sent!\n\nPlease complete your EFT payment and email your proof of payment.");
+     document.getElementById("bookingForm").reset();
   })
+
   .catch(()=>{
-    alert("⚠️ There was an error submitting your booking. Please try again.");
+     alert("⚠️ Error submitting booking. Please try again.");
   });
 
 }
+
 </script>
 
 </body>
