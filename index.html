@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Excellent Studies ZA — Book Tutoring</title>
+
+<title>Excellent Studies ZA | Book Tutoring</title>
 
 <style>
 body{
@@ -17,9 +18,9 @@ body{
   margin:auto;
   background:#000000;
   color:#ffffff;
-  padding:25px;
-  border-radius:10px;
-  box-shadow:0 0 16px rgba(0,0,0,0.2);
+  padding:30px;
+  border-radius:12px;
+  box-shadow:0 0 18px rgba(0,0,0,0.25);
 }
 
 h1{
@@ -30,50 +31,48 @@ h1{
 .tagline{
   text-align:center;
   color:#cccccc;
-  margin-bottom:20px;
+  margin-bottom:18px;
 }
 
 label{
   font-weight:bold;
   display:block;
-  margin-top:5px;
+  margin-top:8px;
 }
 
 input, textarea, select{
   width:100%;
   padding:10px;
-  margin:5px 0 12px;
   border-radius:6px;
   border:none;
+  margin-top:4px;
+  background:#f5f5f5;
+  color:#000000;
 }
 
 textarea{
   height:80px;
 }
 
-select, input, textarea{
-  background:#f5f5f5;
-  color:#000000;
-}
-
 .note-box{
   background:#111111;
-  padding:10px;
-  border-left:4px solid #ffffff;
-  font-size:14px;
+  padding:12px;
+  border-left:5px solid #ffffff;
   margin-bottom:15px;
+  font-size:14px;
 }
 
 button{
   width:100%;
+  margin-top:10px;
   padding:14px;
   background:#ffffff;
   color:#000000;
+  font-size:16px;
+  font-weight:bold;
   border:none;
   border-radius:6px;
-  font-size:16px;
   cursor:pointer;
-  font-weight:bold;
 }
 
 button:hover{
@@ -84,13 +83,14 @@ button:hover{
   color:#00ff7f;
   text-align:center;
   font-weight:bold;
+  margin-top:15px;
 }
 
 footer{
-  text-align:center;
   margin-top:15px;
-  font-size:13px;
+  text-align:center;
   color:#cccccc;
+  font-size:13px;
 }
 </style>
 </head>
@@ -99,38 +99,40 @@ footer{
 
 <div class="container">
 
-  <h1>📚 Excellent Studies ZA</h1>
-  <p class="tagline">
-    Tutoring & University Application Assistance
-  </p>
+<h1>📚 Excellent Studies ZA</h1>
 
-  <div class="note-box">
-    📌 <strong>Important:</strong>  
-    In the <strong>NOTES</strong> section please tell us:
-    <ul>
-      <li>Your <strong>grade</strong> (e.g. Grade 10, Matric, 1st-year)</li>
-      <li>How many <strong>hours</strong> of tutoring you would like</li>
-    </ul>
-    Example: <em>Grade 11 — 2 hours Maths tutoring</em>
-  </div>
+<p class="tagline">
+Tutoring & Academic Support
+</p>
+
+<div class="note-box">
+  📌 <strong>Important:</strong><br>
+  In the <strong>NOTES</strong> box please include:
+  <ul>
+    <li>Your <strong>grade</strong></li>
+    <li>Number of <strong>hours</strong> needed</li>
+  </ul>
+  Example: <em>Grade 11 – 2 hours Physical Science</em>
+</div>
 
 <form id="bookingForm">
 
-<label>Student Name</label>
+<label>Student Full Name</label>
 <input type="text" id="name" required>
 
 <label>Email Address</label>
 <input type="email" id="email" required>
 
 <label>Subject</label>
-<select id="subject">
-  <option>Maths</option>
-  <option>Physics</option>
-  <option>Chemistry</option>
-  <option>Biology</option>
-  <option>Computer Studies</option>
-  <option>English</option>
-  <option>University Application Help</option>
+<select id="subject" required>
+  <option value="">-- Select Subject --</option>
+  <option>Mathematics</option>
+  <option>Mathematical Literacy</option>
+  <option>Accounting</option>
+  <option>Business Studies</option>
+  <option>Physical Science</option>
+  <option>Geography</option>
+  <option>Life Science</option>
 </select>
 
 <label>Date</label>
@@ -150,8 +152,8 @@ footer{
   <option>17:00</option>
 </select>
 
-<label>Notes (Grade + Number of Hours REQUIRED)</label>
-<textarea id="notes" placeholder="Example: Grade 11 — 2 hours Maths tutoring"></textarea>
+<label>Notes (Grade + Number of Hours Required)</label>
+<textarea id="notes" placeholder="Example: Grade 10 – 2 hours Maths tutoring"></textarea>
 
 <button type="submit">✅ Book Session</button>
 
@@ -171,6 +173,7 @@ const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec";
 
 document.getElementById("bookingForm").addEventListener("submit", function(e){
+
   e.preventDefault();
 
   const data = {
@@ -184,28 +187,32 @@ document.getElementById("bookingForm").addEventListener("submit", function(e){
 
   fetch(SCRIPT_URL,{
     method:"POST",
-    body:JSON.stringify(data)
+    body: JSON.stringify(data)
   })
+
   .then(res => res.json())
-  .then(() =>{
+  .then(() => {
+
     document.getElementById("msg").innerHTML =
-      "✅ Booking sent successfully! We will contact you shortly.";
+      "✅ Booking sent successfully! We’ll contact you shortly.";
 
     document.getElementById("bookingForm").reset();
 
-    // EMAIL NOTIFICATION TO OWNER
     window.location.href =
-      `mailto:excellent.studies.za@gmail.com?subject=New Tutoring Booking&body=`+
-      `Name: ${data.name}%0D%0A`+
-      `Email: ${data.email}%0D%0A`+
-      `Subject: ${data.subject}%0D%0A`+
-      `Date: ${data.date}%0D%0A`+
-      `Time: ${data.time}%0D%0A`+
+      `mailto:excellent.studies.za@gmail.com?subject=New Tutoring Booking&body=` +
+      `Name: ${data.name}%0D%0A` +
+      `Email: ${data.email}%0D%0A` +
+      `Subject: ${data.subject}%0D%0A` +
+      `Date: ${data.date}%0D%0A` +
+      `Time: ${data.time}%0D%0A` +
       `Notes: ${data.notes}`;
+
   })
-  .catch(()=>{
-     alert("⚠️ Connection error — please try again.");
-  })
+
+  .catch(() => {
+    alert("⚠️ Error submitting booking. Please try again.");
+  });
+
 });
 
 </script>
