@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>About Us | Excellent Studies ZA</title>
+<style>
+
+body{
+    background:#ffffff;
+    font-family:Arial, sans-serif;
+    padding:20px;
+}
+
+.container{
+    max-width:750px;
+    background:black;
+    color:white;
+    margin:auto;
+    padding:30px;
+    border-radius:12px;
+}
+
+h1,h2{
+    text-align:center;
+}
+
+a{
+    color:black;
+    background:white;
+    padding:6px 10px;
+    border-radius:6px;
+    text-decoration:none;
+}
+
+.section{
+    margin-top:18px;
+}
+
+ul{
+    margin-left:20px;
+}
+
+input, textarea{
+    width:100%;
+    padding:8px;
+    margin-bottom:10px;
+    border-radius:6px;
+    border:none;
+}
+
+button{
+    width:100%;
+    padding:10px;
+    background:white;
+    color:black;
+    border-radius:6px;
+    border:none;
+    font-weight:bold;
+}
+
+.review-box{
+    background:#111;
+    border-radius:8px;
+    padding:10px;
+    margin:6px 0;
+}
+
+.contact{
+    background:#111;
+    padding:12px;
+    border-radius:8px;
+    margin-top:14px;
+    text-align:center;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📘 About Excellent Studies ZA</h1>
+
+<p style="text-align:center;">
+<a href="index.html">⬅ Back to Bookings</a>
+</p>
+
+<!-- STORY -->
+<div class="section">
+<p>
+<strong>Excellent Studies ZA</strong> was founded with one powerful mission:
+to help students who are struggling academically realize their full potential.
+</p>
+
+<p>
+The business was started by a 19-year-old student who is living proof that 
+<strong>an academic comeback is possible</strong> with the right guidance and
+work ethic.
+</p>
+
+<p>
+After experiencing poor academic performance — scoring marks in the 30% range —
+our founder committed to changing their approach to learning. Through structured
+study methods, discipline, and mentorship, those low marks turned into 
+<strong>academic distinctions</strong>.
+</p>
+
+<p>
+That personal journey became the heart of Excellent Studies ZA:
+to guide students from the bottom to the top using proven methods 
+that truly work.
+</p>
+</div>
+
+<!-- VALUES -->
+<div class="section">
+<h2>🌱 Our Values</h2>
+<ul>
+<li><strong>Believe in Potential</strong> – Every student can improve when given the right tools.</li>
+<li><strong>Hard Work Culture</strong> – Success is built through discipline and consistency.</li>
+<li><strong>Student-Centered Learning</strong> – We adapt our teaching to how each student learns best.</li>
+<li><strong>Excellence</strong> – We strive for top results in everything we do.</li>
+<li><strong>Integrity</strong> – Honest guidance and genuine care for every learner.</li>
+</ul>
+</div>
+
+<!-- TEAM -->
+<div class="section">
+<h2>👩‍🏫 Our Tutors</h2>
+
+<p>
+All tutors at Excellent Studies ZA have achieved
+<strong>distinctions in the subjects they teach</strong>.
+This ensures that every learner is guided by someone who
+has mastered the content and understands what it takes
+to succeed.
+</p>
+
+<p>
+Subjects we specialize in:
+</p>
+
+<ul>
+<li>Mathematics</li>
+<li>Mathematical Literacy</li>
+<li>Accounting</li>
+<li>Business Studies</li>
+<li>Physical Science</li>
+<li>Geography</li>
+<li>Life Sciences</li>
+</ul>
+</div>
+
+<!-- CONTACT -->
+<div class="contact">
+
+<h2>📞 Contact Us</h2>
+
+<p>📱 Phone: 063 125 9472</p>
+<p>📧 Email: excellent.studies.za@gmail.com</p>
+
+<p>
+<a href="mailto:excellent.studies.za@gmail.com">Email Us</a>
+</p>
+
+<p>
+<a href="https://www.tiktok.com/@excellent.studiesza?_r=1&_t=ZM-924CbEM6Z8C">
+Follow us on TikTok 🎥
+</a>
+</p>
+
+</div>
+
+<!-- REVIEWS -->
+<div class="section">
+
+<h2>⭐ Student Reviews</h2>
+
+<form id="reviewForm">
+<input type="text" id="reviewName" placeholder="Your Name" required>
+<textarea id="reviewText" placeholder="Write your review here..." required></textarea>
+<button type="submit">Submit Review ⭐</button>
+</form>
+
+<div id="reviews"></div>
+
+</div>
+
+<footer style="text-align:center;color:#ccc;margin-top:15px;">
+© 2025 Excellent Studies ZA
+</footer>
+
+</div>
+
+<script>
+const form = document.getElementById("reviewForm");
+const reviewsContainer = document.getElementById("reviews");
+
+function loadReviews(){
+    const reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+    reviewsContainer.innerHTML = "";
+    reviews.forEach(r=>{
+        const div = document.createElement("div");
+        div.className="review-box";
+        div.innerHTML=`<strong>${r.name}</strong><p>${r.text}</p>`;
+        reviewsContainer.appendChild(div);
+    });
+}
+
+form.addEventListener("submit",(e)=>{
+    e.preventDefault();
+
+    const review={
+        name:reviewName.value,
+        text:reviewText.value
+    };
+
+    let reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+    reviews.push(review);
+
+    localStorage.setItem("reviews", JSON.stringify(reviews));
+
+    form.reset();
+    loadReviews();
+});
+
+loadReviews();
+</script>
+
+</body>
+</html>
