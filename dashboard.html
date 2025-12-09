@@ -38,18 +38,60 @@ th, td{
 }
 th{background:#222;}
 td{background:#111;}
+label{margin-right:6px;}
+input, select{
+    padding:4px 6px;
+    border-radius:6px;
+    border:none;
+    margin:0 4px;
+}
+.filter-container{
+    text-align:center;
+    margin-top:15px;
+    margin-bottom:15px;
+}
 </style>
 </head>
 <body>
+
+<script>
+// Password protection
+const password = "Excell2025"; // Change this to your secure password
+let attempt = prompt("Enter admin password to access dashboard:");
+if(attempt !== password){
+    alert("Incorrect password! Access denied.");
+    window.location.href = "index.html"; // redirect if wrong
+}
+</script>
 
 <div class="container">
 
 <h1>🎯 Loyalty Tracking Dashboard</h1>
 
-<p style="text-align:center;">
-<a href="index.html">⬅ Back to Booking</a>
-<a href="prices.html">💰 Prices</a>
-</p>
+<div style="text-align:center;margin:10px 0;">
+    <a href="index.html">⬅ Back to Booking</a>
+    <a href="prices.html">💰 Prices</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+</div>
+
+<!-- Filters -->
+<div class="filter-container">
+<label>Filter by Month:</label>
+<input type="month" id="filterMonth">
+
+<label>Filter by Subject:</label>
+<select id="filterSubject">
+    <option value="">All Subjects</option>
+    <option>Mathematics</option>
+    <option>Mathematical Literacy</option>
+    <option>Accounting</option>
+    <option>Business Studies</option>
+    <option>Physical Science</option>
+    <option>Geography</option>
+    <option>Life Science</option>
+</select>
+</div>
 
 <table>
 <thead>
@@ -59,10 +101,11 @@ td{background:#111;}
 <th>Total Sessions</th>
 <th>Discount Eligible?</th>
 <th>Next Booking</th>
+<th>Subject</th>
 </tr>
 </thead>
 <tbody id="dashboardBody">
-<tr><td colspan="5" style="text-align:center;">Loading...</td></tr>
+<tr><td colspan="6" style="text-align:center;">Loading...</td></tr>
 </tbody>
 </table>
 
@@ -70,30 +113,46 @@ td{background:#111;}
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec";
+const filterMonth = document.getElementById("filterMonth");
+const filterSubject = document.getElementById("filterSubject");
+let allData = [];
 
-fetch(SCRIPT_URL)
-.then(res => res.json())
-.then(data => {
+function loadDashboard(data){
     const tbody = document.getElementById("dashboardBody");
     tbody.innerHTML="";
 
-    // Aggregate sessions per student
     const students = {};
 
     data.forEach(entry => {
+        const entryDate = new Date(entry.date + " " + entry.time);
+        const monthFilter = filterMonth.value ? new Date(filterMonth.value + "-01") : null;
+        const subjectFilter = filterSubject.value;
+
+        // Skip if filters don't match
+        if(monthFilter && (entryDate.getMonth() !== monthFilter.getMonth() || entryDate.getFullYear() !== monthFilter.getFullYear())){
+            return;
+        }
+        if(subjectFilter && entry.subject !== subjectFilter){
+            return;
+        }
+
         const email = entry.email;
         if(!students[email]){
             students[email] = {
                 name: entry.name,
                 email: email,
                 sessions: 0,
-                nextBooking: entry.date + " " + entry.time
+                nextBooking: entry.date + " " + entry.time,
+                subjects:[entry.subject]
             };
+        } else {
+            if(!students[email].subjects.includes(entry.subject)){
+                students[email].subjects.push(entry.subject);
+            }
         }
         students[email].sessions +=1;
-        // Update next booking if earlier
+
         const currentNext = new Date(students[email].nextBooking);
-        const entryDate = new Date(entry.date + " " + entry.time);
         if(entryDate < currentNext){
             students[email].nextBooking = entry.date + " " + entry.time;
         }
@@ -107,12 +166,28 @@ fetch(SCRIPT_URL)
                          <td>${s.email}</td>
                          <td>${s.sessions}</td>
                          <td>${discountEligible}</td>
-                         <td>${s.nextBooking}</td>`;
+                         <td>${s.nextBooking}</td>
+                         <td>${s.subjects.join(", ")}</td>`;
         tbody.appendChild(row);
     }
+
+    if(Object.keys(students).length === 0){
+        tbody.innerHTML="<tr><td colspan='6' style='text-align:center;'>No matching records</td></tr>";
+    }
+}
+
+// Re-load dashboard when filters change
+filterMonth.addEventListener("change",()=>loadDashboard(allData));
+filterSubject.addEventListener("change",()=>loadDashboard(allData));
+
+fetch(SCRIPT_URL)
+.then(res=>res.json())
+.then(data=>{
+    allData = data;
+    loadDashboard(allData);
 })
 .catch(err=>{
-    document.getElementById("dashboardBody").innerHTML="<tr><td colspan='5'>Error loading data</td></tr>";
+    document.getElementById("dashboardBody").innerHTML="<tr><td colspan='6'>Error loading data</td></tr>";
     console.error(err);
 });
 </script>
