@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Excellent Studies ZA | Book & Pay</title>
+<title>Excellent Studies ZA | Book a Session</title>
 
 <style>
 body{
@@ -18,7 +18,9 @@ body{
   padding:30px;
   border-radius:12px;
 }
-h1{text-align:center;}
+h1{text-align:center;margin-bottom:5px;}
+.tagline{text-align:center;font-size:14px;opacity:0.9;}
+
 label{display:block;font-weight:bold;margin-top:10px;}
 input,select,textarea{
   width:100%;
@@ -27,17 +29,23 @@ input,select,textarea{
   border-radius:6px;
   border:none;
 }
+
 button{
   width:100%;
   background:white;
   color:black;
-  padding:12px;
+  padding:14px;
   border:none;
   border-radius:8px;
   font-weight:bold;
+  cursor:pointer;
+  font-size:16px;
 }
 
-.nav{text-align:center;margin:10px 0;}
+.nav{
+  text-align:center;
+  margin:12px 0 18px;
+}
 .nav a{
   color:white;
   border:1px solid white;
@@ -45,6 +53,20 @@ button{
   text-decoration:none;
   border-radius:6px;
   margin:0 4px;
+}
+
+.notice{
+  background:#eee;
+  color:black;
+  padding:15px;
+  border-radius:10px;
+  margin-top:20px;
+  font-size:14px;
+}
+
+.notice h3{
+  margin-top:0;
+  text-align:center;
 }
 </style>
 </head>
@@ -54,6 +76,7 @@ button{
 <div class="container">
 
 <h1>📚 Excellent Studies ZA</h1>
+<p class="tagline">Helping students rise from struggle to success</p>
 
 <div class="nav">
   <a href="prices.html">Prices</a>
@@ -61,26 +84,16 @@ button{
   <a href="dashboard.html">Admin Dashboard</a>
 </div>
 
-<form id="bookingForm" action="https://www.payfast.co.za/eng/process" method="post" onsubmit="saveBooking()">
+<form id="bookingForm" onsubmit="submitBooking()">
 
-<!-- PayFast Credentials -->
-<input type="hidden" name="merchant_id" value="MERCHANT_ID">
-<input type="hidden" name="merchant_key" value="MERCHANT_KEY">
-<input type="hidden" name="passphrase" value="YOUR_PASSPHRASE">
+<label>Student Full Name</label>
+<input type="text" id="name" required>
 
-<!-- Payment Settings -->
-<input type="hidden" name="currency" value="ZAR">
-<input type="hidden" name="amount" id="amount" value="110">
-<input type="hidden" name="item_name" id="item_name" value="Tutoring Session">
-
-<label>Student Name</label>
-<input type="text" name="name_first" id="name" required>
-
-<label>Email</label>
-<input type="email" name="email_address" id="email" required>
+<label>Email Address</label>
+<input type="email" id="email" required>
 
 <label>Select Subject</label>
-<select id="subject" name="subject" required>
+<select id="subject" required>
   <option value="Mathematics">Mathematics</option>
   <option value="Mathematical Literacy">Mathematical Literacy</option>
   <option value="Accounting">Accounting</option>
@@ -91,46 +104,70 @@ button{
 </select>
 
 <label>Select Package</label>
-<select id="package" required onchange="setPrice()">
-  <option value="110">Single Session – R110</option>
-  <option value="210">2 Hour Session – R210</option>
-  <option value="430">Monthly Package – R430 (1hr/week)</option>
-  <option value="2016">Group Monthly Package – R2016 (40% OFF)</option>
-  <option value="210">University Applications – R210</option>
+<select id="package" required>
+  <option value="Single Session – R110">Single Session – R110</option>
+  <option value="2 Hour Session – R210">2 Hour Session – R210</option>
+  <option value="Monthly Package – R430">Monthly Package – R430</option>
+  <option value="Group Monthly – R2016 (40% OFF)">Group Monthly – R2016 (40% OFF)</option>
+  <option value="University Applications – R210">University Applications – R210</option>
 </select>
 
 <label>Session Date</label>
-<input type="date" name="custom_date" id="date" required>
+<input type="date" id="date" required>
 
 <label>Time</label>
-<input type="time" name="custom_time" id="time" required>
+<input type="time" id="time" required>
 
-<label>Notes (hours + grade)</label>
-<textarea name="notes" id="notes" placeholder="Example: 2 hours, Grade 11"></textarea>
+<label>Notes (Hours + Grade)</label>
+<textarea id="notes" placeholder="Example: Grade 11 · 2 hours weekly"></textarea>
 
-<button type="submit">💳 BOOK & PAY SECURELY</button>
+<button type="submit">✅ SUBMIT BOOKING</button>
+
 </form>
+
+<div class="notice">
+<h3>💳 EFT Payment Details</h3>
+
+<p>
+After submitting your booking, please make payment via **EFT or cash deposit** using the banking details below and email your proof of payment to:
+<br><br>
+<b>📧 excellent.studies.za@gmail.com</b>
+</p>
+
+<hr>
+
+<p>
+<b>Bank:</b> Standard Bank<br>
+<b>Branch:</b> Centurion Lifes<br>
+<b>Branch Code:</b> 2645<br>
+<b>Account Holder:</b> Miss Reamogetsoe RRM Mokati<br>
+<b>Account Number:</b> 013876252<br>
+<b>Account Type:</b> Current<br>
+<b>SWIFT Code:</b> SBZAZAJJ
+</p>
+
+<p>
+<b>Payment Reference:</b> Student Name + Subject
+</p>
+
+<p style="text-align:center;">
+<i>Bookings are confirmed only once proof of payment has been received.</i>
+</p>
+
+</div>
 
 </div>
 
 <script>
-// Auto price update
-function setPrice(){
-  const pkg=document.getElementById("package");
-  const price=pkg.value;
-  document.getElementById("amount").value=price;
-  document.getElementById("item_name").value =
-    "Excellent Studies ZA – "+pkg.options[pkg.selectedIndex].text;
-}
-setPrice();
+function submitBooking(){
 
-// Save booking to Google Sheets
-function saveBooking(){
+  event.preventDefault();
 
-  const data = {
+  const bookingData = {
     name: document.getElementById("name").value,
     email: document.getElementById("email").value,
     subject: document.getElementById("subject").value,
+    package: document.getElementById("package").value,
     date: document.getElementById("date").value,
     time: document.getElementById("time").value,
     notes: document.getElementById("notes").value
@@ -139,10 +176,15 @@ function saveBooking(){
   fetch("https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec",{
     method:"POST",
     headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify(data)
+    body: JSON.stringify(bookingData)
   })
-  .then(()=>console.log("Booking saved"))
-  .catch(err=>console.error("Saving error:", err));
+  .then(()=>{
+    alert("✅ Your booking has been submitted successfully!\n\nPlease complete your EFT payment using the banking details on this page and email your proof of payment.");
+    document.getElementById("bookingForm").reset();
+  })
+  .catch(()=>{
+    alert("⚠️ There was an error submitting your booking. Please try again.");
+  });
 
 }
 </script>
