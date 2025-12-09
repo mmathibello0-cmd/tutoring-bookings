@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Excellent Studies ZA | Loyalty Dashboard</title>
+<style>
+body{
+    font-family:Arial;
+    background:#fff;
+    padding:20px;
+}
+.container{
+    max-width:900px;
+    background:black;
+    color:white;
+    margin:auto;
+    padding:30px;
+    border-radius:12px;
+}
+h1{text-align:center;}
+a{
+    color:black;
+    background:white;
+    padding:6px 12px;
+    border-radius:6px;
+    text-decoration:none;
+    margin:4px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+th, td{
+    border:1px solid white;
+    padding:8px;
+    text-align:left;
+}
+th{background:#222;}
+td{background:#111;}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>🎯 Loyalty Tracking Dashboard</h1>
+
+<p style="text-align:center;">
+<a href="index.html">⬅ Back to Booking</a>
+<a href="prices.html">💰 Prices</a>
+</p>
+
+<table>
+<thead>
+<tr>
+<th>Student Name</th>
+<th>Email</th>
+<th>Total Sessions</th>
+<th>Discount Eligible?</th>
+<th>Next Booking</th>
+</tr>
+</thead>
+<tbody id="dashboardBody">
+<tr><td colspan="5" style="text-align:center;">Loading...</td></tr>
+</tbody>
+</table>
+
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec";
+
+fetch(SCRIPT_URL)
+.then(res => res.json())
+.then(data => {
+    const tbody = document.getElementById("dashboardBody");
+    tbody.innerHTML="";
+
+    // Aggregate sessions per student
+    const students = {};
+
+    data.forEach(entry => {
+        const email = entry.email;
+        if(!students[email]){
+            students[email] = {
+                name: entry.name,
+                email: email,
+                sessions: 0,
+                nextBooking: entry.date + " " + entry.time
+            };
+        }
+        students[email].sessions +=1;
+        // Update next booking if earlier
+        const currentNext = new Date(students[email].nextBooking);
+        const entryDate = new Date(entry.date + " " + entry.time);
+        if(entryDate < currentNext){
+            students[email].nextBooking = entry.date + " " + entry.time;
+        }
+    });
+
+    for(const key in students){
+        const s = students[key];
+        const discountEligible = s.sessions >=5 ? "Yes (15% OFF)" : "No";
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${s.name}</td>
+                         <td>${s.email}</td>
+                         <td>${s.sessions}</td>
+                         <td>${discountEligible}</td>
+                         <td>${s.nextBooking}</td>`;
+        tbody.appendChild(row);
+    }
+})
+.catch(err=>{
+    document.getElementById("dashboardBody").innerHTML="<tr><td colspan='5'>Error loading data</td></tr>";
+    console.error(err);
+});
+</script>
+
+</body>
+</html>
