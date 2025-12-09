@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-<title>Excellent Studies ZA | Book Tutoring</title>
+<title>Excellent Studies ZA | Book a Session</title>
 
 <style>
 body{
@@ -12,7 +11,6 @@ body{
   margin:0;
   padding:20px;
 }
-
 .container{
   max-width:750px;
   margin:auto;
@@ -22,117 +20,95 @@ body{
   border-radius:12px;
   box-shadow:0 0 18px rgba(0,0,0,0.25);
 }
-
 h1{
   text-align:center;
-  margin-bottom:5px;
 }
-
 .tagline{
   text-align:center;
   color:#cccccc;
-  margin-bottom:18px;
 }
-
+.nav{
+  text-align:center;
+  margin:15px 0;
+}
+.nav a{
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  border:1px solid white;
+  padding:8px 14px;
+  border-radius:6px;
+}
 label{
   font-weight:bold;
   display:block;
-  margin-top:8px;
 }
-
-input, textarea, select{
+input, select, textarea{
   width:100%;
   padding:10px;
   border-radius:6px;
   border:none;
-  margin-top:4px;
-  background:#f5f5f5;
-  color:#000000;
+  margin:5px 0 10px;
 }
-
-textarea{
-  height:80px;
-}
-
 .note-box{
-  background:#111111;
-  padding:12px;
-  border-left:5px solid #ffffff;
-  margin-bottom:15px;
-  font-size:14px;
+  background:#111;
+  padding:10px;
+  border-left:4px solid #fff;
+  margin-bottom:12px;
 }
-
 button{
   width:100%;
-  margin-top:10px;
   padding:14px;
-  background:#ffffff;
-  color:#000000;
-  font-size:16px;
-  font-weight:bold;
+  background:white;
+  color:black;
   border:none;
   border-radius:6px;
-  cursor:pointer;
+  font-weight:bold;
 }
-
-button:hover{
-  background:#dddddd;
-}
-
 .success{
   color:#00ff7f;
   text-align:center;
-  font-weight:bold;
-  margin-top:15px;
-}
-
-footer{
-  margin-top:15px;
-  text-align:center;
-  color:#cccccc;
-  font-size:13px;
 }
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
 <h1>📚 Excellent Studies ZA</h1>
+<p class="tagline">Tutoring & Academic Support</p>
 
-<p class="tagline">
-Tutoring & Academic Support
-</p>
+<div class="nav">
+  <a href="prices.html">💰 View Prices</a>
+</div>
 
 <div class="note-box">
-  📌 <strong>Important:</strong><br>
-  In the <strong>NOTES</strong> box please include:
-  <ul>
-    <li>Your <strong>grade</strong></li>
-    <li>Number of <strong>hours</strong> needed</li>
-  </ul>
-  Example: <em>Grade 11 – 2 hours Physical Science</em>
+✅ In the <strong>NOTES</strong> section please include:
+<ul>
+<li>Your <b>grade</b></li>
+<li>Number of <b>hours</b> you'd like</li>
+</ul>
+Example: Grade 11 – 2 hours Physical Science
 </div>
 
 <form id="bookingForm">
 
-<label>Student Full Name</label>
+<label>Student Name</label>
 <input type="text" id="name" required>
 
-<label>Email Address</label>
+<label>Email</label>
 <input type="email" id="email" required>
 
 <label>Subject</label>
 <select id="subject" required>
-  <option value="">-- Select Subject --</option>
-  <option>Mathematics</option>
-  <option>Mathematical Literacy</option>
-  <option>Accounting</option>
-  <option>Business Studies</option>
-  <option>Physical Science</option>
-  <option>Geography</option>
-  <option>Life Science</option>
+<option value="">Select subject</option>
+<option>Mathematics</option>
+<option>Mathematical Literacy</option>
+<option>Accounting</option>
+<option>Business Studies</option>
+<option>Physical Science</option>
+<option>Geography</option>
+<option>Life Science</option>
 </select>
 
 <label>Date</label>
@@ -140,82 +116,66 @@ Tutoring & Academic Support
 
 <label>Time</label>
 <select id="time">
-  <option>08:00</option>
-  <option>09:00</option>
-  <option>10:00</option>
-  <option>11:00</option>
-  <option>12:00</option>
-  <option>13:00</option>
-  <option>14:00</option>
-  <option>15:00</option>
-  <option>16:00</option>
-  <option>17:00</option>
+<option>09:00</option>
+<option>10:00</option>
+<option>11:00</option>
+<option>12:00</option>
+<option>13:00</option>
+<option>14:00</option>
+<option>15:00</option>
+<option>16:00</option>
+<option>17:00</option>
+<option>18:00</option>
+<option>19:00</option>
+<option>20:00</option>
 </select>
 
-<label>Notes (Grade + Number of Hours Required)</label>
-<textarea id="notes" placeholder="Example: Grade 10 – 2 hours Maths tutoring"></textarea>
+<label>Notes (Grade & Hours)</label>
+<textarea id="notes" placeholder="Grade 12 – 1 hour Maths"></textarea>
 
 <button type="submit">✅ Book Session</button>
-
 </form>
 
 <p id="msg" class="success"></p>
 
-<footer>
-  © 2025 Excellent Studies ZA
-</footer>
-
 </div>
 
 <script>
-
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec";
 
-document.getElementById("bookingForm").addEventListener("submit", function(e){
+document.getElementById("bookingForm").addEventListener("submit",(e)=>{
+e.preventDefault();
 
-  e.preventDefault();
+const data={
+name: name.value,
+email: email.value,
+subject: subject.value,
+date: date.value,
+time: time.value,
+notes: notes.value
+};
 
-  const data = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    subject: document.getElementById("subject").value,
-    date: document.getElementById("date").value,
-    time: document.getElementById("time").value,
-    notes: document.getElementById("notes").value
-  };
+fetch(SCRIPT_URL,{
+method:"POST",
+body: JSON.stringify(data)
+})
+.then(res=>res.json())
+.then(()=>{
+msg.textContent="✅ Booking submitted successfully!";
+document.getElementById("bookingForm").reset();
 
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body: JSON.stringify(data)
-  })
-
-  .then(res => res.json())
-  .then(() => {
-
-    document.getElementById("msg").innerHTML =
-      "✅ Booking sent successfully! We’ll contact you shortly.";
-
-    document.getElementById("bookingForm").reset();
-
-    window.location.href =
-      `mailto:excellent.studies.za@gmail.com?subject=New Tutoring Booking&body=` +
-      `Name: ${data.name}%0D%0A` +
-      `Email: ${data.email}%0D%0A` +
-      `Subject: ${data.subject}%0D%0A` +
-      `Date: ${data.date}%0D%0A` +
-      `Time: ${data.time}%0D%0A` +
-      `Notes: ${data.notes}`;
-
-  })
-
-  .catch(() => {
-    alert("⚠️ Error submitting booking. Please try again.");
-  });
-
+window.location.href =
+`mailto:excellent.studies.za@gmail.com
+?subject=New Tutoring Booking
+&body=Name: ${data.name}
+%0D%0AEmail: ${data.email}
+%0D%0ASubject: ${data.subject}
+%0D%0ADate: ${data.date}
+%0D%0ATime: ${data.time}
+%0D%0ANotes: ${data.notes}`;
 });
-
+});
 </script>
-
 </body>
 </html>
