@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Remo's Tutoring & Application Bookings</title>
+
+<style>
+body{
+  background:#f2f2f2;
+  font-family:Arial, sans-serif;
+  margin:0;
+  padding:20px;
+}
+.container{
+  max-width:700px;
+  margin:auto;
+  background:white;
+  padding:20px;
+  border-radius:10px;
+}
+h1{
+  text-align:center;
+}
+label{
+  font-weight:bold;
+}
+input, textarea, select{
+  width:100%;
+  padding:8px;
+  margin:5px 0 10px;
+}
+button{
+  width:100%;
+  padding:12px;
+  background:#4CAF50;
+  color:white;
+  border:none;
+  border-radius:5px;
+  font-size:16px;
+}
+button:hover{
+  background:#43a047;
+}
+.calendar{
+  margin-bottom:15px;
+}
+.success{
+  color:green;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>📚 Book Your Tutoring Session</h1>
+  <p style="text-align:center;">
+    Maths • Physics • Science • Computer Studies • University Applications
+  </p>
+
+<form id="bookingForm">
+
+<label>Name</label>
+<input type="text" id="name" required>
+
+<label>Email</label>
+<input type="email" id="email" required>
+
+<label>Subject</label>
+<select id="subject">
+  <option>Maths</option>
+  <option>Physics</option>
+  <option>Chemistry</option>
+  <option>Biology</option>
+  <option>Computer Studies</option>
+  <option>English</option>
+  <option>University Application Help</option>
+</select>
+
+<label>Date</label>
+<input type="date" id="date" required>
+
+<label>Time</label>
+<select id="time">
+  <option>08:00</option>
+  <option>09:00</option>
+  <option>10:00</option>
+  <option>11:00</option>
+  <option>12:00</option>
+  <option>13:00</option>
+  <option>14:00</option>
+  <option>15:00</option>
+  <option>16:00</option>
+  <option>17:00</option>
+</select>
+
+<label>Notes</label>
+<textarea id="notes"></textarea>
+
+<button type="submit">✅ Book Session</button>
+
+</form>
+
+<p id="msg" class="success"></p>
+
+</div>
+
+<script>
+
+const SCRIPT_URL = "PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE";
+
+document.getElementById("bookingForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const data = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    subject: document.getElementById("subject").value,
+    date: document.getElementById("date").value,
+    time: document.getElementById("time").value,
+    notes: document.getElementById("notes").value
+  };
+
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(() =>{
+    document.getElementById("msg").innerHTML =
+      "✅ Booking submitted successfully! You will be contacted soon.";
+
+    document.getElementById("bookingForm").reset();
+
+    // EMAIL NOTIFICATION
+    window.location.href =
+      `mailto:0641259472?subject=New Tutoring Booking&body=` +
+      `Name: ${data.name}%0D%0A` +
+      `Email: ${data.email}%0D%0A` +
+      `Subject: ${data.subject}%0D%0A` +
+      `Date: ${data.date}%0D%0A` +
+      `Time: ${data.time}%0D%0A` +
+      `Notes: ${data.notes}`;
+  })
+});
+</script>
+
+</body>
+</html>
