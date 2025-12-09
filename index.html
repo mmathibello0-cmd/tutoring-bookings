@@ -2,180 +2,149 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Excellent Studies ZA | Book a Session</title>
+<title>Excellent Studies ZA | Book & Pay</title>
 
 <style>
 body{
-  background:#ffffff;
-  font-family: Arial, sans-serif;
-  margin:0;
+  background:#fff;
+  font-family:Arial, sans-serif;
   padding:20px;
 }
 .container{
   max-width:750px;
+  background:black;
+  color:white;
   margin:auto;
-  background:#000000;
-  color:#ffffff;
   padding:30px;
   border-radius:12px;
-  box-shadow:0 0 18px rgba(0,0,0,0.25);
 }
-h1{
-  text-align:center;
-}
-.tagline{
-  text-align:center;
-  color:#cccccc;
-}
-.nav{
-  text-align:center;
-  margin:15px 0;
-}
-.nav a{
-  color:white;
-  text-decoration:none;
-  font-weight:bold;
-  border:1px solid white;
-  padding:8px 14px;
-  border-radius:6px;
-}
-label{
-  font-weight:bold;
-  display:block;
-}
-input, select, textarea{
+h1{text-align:center;}
+label{display:block;font-weight:bold;margin-top:10px;}
+input,select,textarea{
   width:100%;
-  padding:10px;
+  padding:8px;
+  margin:6px 0 10px;
   border-radius:6px;
   border:none;
-  margin:5px 0 10px;
-}
-.note-box{
-  background:#111;
-  padding:10px;
-  border-left:4px solid #fff;
-  margin-bottom:12px;
 }
 button{
   width:100%;
-  padding:14px;
   background:white;
   color:black;
+  padding:12px;
   border:none;
-  border-radius:6px;
+  border-radius:8px;
   font-weight:bold;
 }
-.success{
-  color:#00ff7f;
-  text-align:center;
+
+.nav{text-align:center;margin:10px 0;}
+.nav a{
+  color:white;
+  border:1px solid white;
+  padding:6px 12px;
+  text-decoration:none;
+  border-radius:6px;
+  margin:0 4px;
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
 <h1>📚 Excellent Studies ZA</h1>
-<p class="tagline">Tutoring & Academic Support</p>
 
 <div class="nav">
-  <a href="prices.html">💰 View Prices</a>
+  <a href="prices.html">Prices</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="dashboard.html">Admin Dashboard</a>
 </div>
 
-<div class="note-box">
-✅ In the <strong>NOTES</strong> section please include:
-<ul>
-<li>Your <b>grade</b></li>
-<li>Number of <b>hours</b> you'd like</li>
-</ul>
-Example: Grade 11 – 2 hours Physical Science
-</div>
+<form id="bookingForm" action="https://www.payfast.co.za/eng/process" method="post" onsubmit="saveBooking()">
 
-<form id="bookingForm">
+<!-- PayFast Credentials -->
+<input type="hidden" name="merchant_id" value="MERCHANT_ID">
+<input type="hidden" name="merchant_key" value="MERCHANT_KEY">
+<input type="hidden" name="passphrase" value="YOUR_PASSPHRASE">
+
+<!-- Payment Settings -->
+<input type="hidden" name="currency" value="ZAR">
+<input type="hidden" name="amount" id="amount" value="110">
+<input type="hidden" name="item_name" id="item_name" value="Tutoring Session">
 
 <label>Student Name</label>
-<input type="text" id="name" required>
+<input type="text" name="name_first" id="name" required>
 
 <label>Email</label>
-<input type="email" id="email" required>
+<input type="email" name="email_address" id="email" required>
 
-<label>Subject</label>
-<select id="subject" required>
-<option value="">Select subject</option>
-<option>Mathematics</option>
-<option>Mathematical Literacy</option>
-<option>Accounting</option>
-<option>Business Studies</option>
-<option>Physical Science</option>
-<option>Geography</option>
-<option>Life Science</option>
+<label>Select Subject</label>
+<select id="subject" name="subject" required>
+  <option value="Mathematics">Mathematics</option>
+  <option value="Mathematical Literacy">Mathematical Literacy</option>
+  <option value="Accounting">Accounting</option>
+  <option value="Business Studies">Business Studies</option>
+  <option value="Physical Science">Physical Science</option>
+  <option value="Geography">Geography</option>
+  <option value="Life Science">Life Science</option>
 </select>
 
-<label>Date</label>
-<input type="date" id="date" required>
+<label>Select Package</label>
+<select id="package" required onchange="setPrice()">
+  <option value="110">Single Session – R110</option>
+  <option value="210">2 Hour Session – R210</option>
+  <option value="430">Monthly Package – R430</option>
+  <option value="2016">Group Monthly Package – R2016 (40% OFF Group Discount)</option>
+  <option value="210">University Applications – R210</option>
+</select>
+
+<label>Session Date</label>
+<input type="date" name="custom_date" id="date" required>
 
 <label>Time</label>
-<select id="time">
-<option>09:00</option>
-<option>10:00</option>
-<option>11:00</option>
-<option>12:00</option>
-<option>13:00</option>
-<option>14:00</option>
-<option>15:00</option>
-<option>16:00</option>
-<option>17:00</option>
-<option>18:00</option>
-<option>19:00</option>
-<option>20:00</option>
-</select>
+<input type="time" name="custom_time" id="time" required>
 
-<label>Notes (Grade & Hours)</label>
-<textarea id="notes" placeholder="Grade 12 – 1 hour Maths"></textarea>
+<label>Notes (hours + grade)</label>
+<textarea name="notes" id="notes" placeholder="Example: 2 hours, Grade 11"></textarea>
 
-<button type="submit">✅ Book Session</button>
+<button type="submit">💳 BOOK & PAY SECURELY</button>
 </form>
-
-<p id="msg" class="success"></p>
 
 </div>
 
 <script>
-const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec";
+// Set price for PayFast
+function setPrice(){
+  const pkg=document.getElementById("package");
+  const price=pkg.value;
+  document.getElementById("amount").value=price;
+  document.getElementById("item_name").value=
+   "Excellent Studies ZA – "+pkg.options[pkg.selectedIndex].text;
+}
+setPrice();
 
-document.getElementById("bookingForm").addEventListener("submit",(e)=>{
-e.preventDefault();
+// Save booking to Google Sheet before submitting
+function saveBooking(){
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const subject = document.getElementById("subject").value;
+  const date = document.getElementById("date").value;
+  const time = document.getElementById("time").value;
+  const notes = document.getElementById("notes").value;
 
-const data={
-name: name.value,
-email: email.value,
-subject: subject.value,
-date: date.value,
-time: time.value,
-notes: notes.value
-};
+  const scriptURL = "https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec";
 
-fetch(SCRIPT_URL,{
-method:"POST",
-body: JSON.stringify(data)
-})
-.then(res=>res.json())
-.then(()=>{
-msg.textContent="✅ Booking submitted successfully!";
-document.getElementById("bookingForm").reset();
-
-window.location.href =
-`mailto:excellent.studies.za@gmail.com
-?subject=New Tutoring Booking
-&body=Name: ${data.name}
-%0D%0AEmail: ${data.email}
-%0D%0ASubject: ${data.subject}
-%0D%0ADate: ${data.date}
-%0D%0ATime: ${data.time}
-%0D%0ANotes: ${data.notes}`;
-});
-});
+  fetch(scriptURL, {
+    method: 'POST',
+    body: JSON.stringify({name, email, subject, date, time, notes}),
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .then(response => console.log("Booking saved to Google Sheet"))
+  .catch(error => console.error("Error saving booking:", error));
+}
 </script>
+
 </body>
 </html>
