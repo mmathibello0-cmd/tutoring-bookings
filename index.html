@@ -6,47 +6,59 @@
 
 <style>
 body{
-  background:#f2f2f2;
+  background:#f4f7fb;
   font-family:Arial, sans-serif;
   margin:0;
   padding:20px;
 }
 .container{
-  max-width:700px;
+  max-width:750px;
   margin:auto;
   background:white;
-  padding:20px;
+  padding:25px;
   border-radius:10px;
+  box-shadow:0 0 15px rgba(0,0,0,0.12);
 }
 h1{
   text-align:center;
+}
+.tagline{
+  text-align:center;
+  color:#555;
 }
 label{
   font-weight:bold;
 }
 input, textarea, select{
   width:100%;
-  padding:8px;
+  padding:10px;
   margin:5px 0 10px;
+  border-radius:6px;
+  border:1px solid #ccc;
 }
 button{
   width:100%;
-  padding:12px;
-  background:#4CAF50;
+  background:#22c55e;
   color:white;
+  padding:14px;
   border:none;
-  border-radius:5px;
+  border-radius:6px;
   font-size:16px;
+  cursor:pointer;
 }
 button:hover{
-  background:#43a047;
-}
-.calendar{
-  margin-bottom:15px;
+  background:#16a34a;
 }
 .success{
   color:green;
+  font-weight:bold;
   text-align:center;
+}
+footer{
+  text-align:center;
+  margin-top:15px;
+  font-size:13px;
+  color:#666;
 }
 </style>
 </head>
@@ -55,16 +67,16 @@ button:hover{
 
 <div class="container">
   <h1>📚 Book Your Tutoring Session</h1>
-  <p style="text-align:center;">
+  <p class="tagline">
     Maths • Physics • Science • Computer Studies • University Applications
   </p>
 
 <form id="bookingForm">
 
-<label>Name</label>
+<label>Student Name</label>
 <input type="text" id="name" required>
 
-<label>Email</label>
+<label>Email Address</label>
 <input type="email" id="email" required>
 
 <label>Subject</label>
@@ -95,7 +107,7 @@ button:hover{
   <option>17:00</option>
 </select>
 
-<label>Notes</label>
+<label>Notes (Optional)</label>
 <textarea id="notes"></textarea>
 
 <button type="submit">✅ Book Session</button>
@@ -104,11 +116,15 @@ button:hover{
 
 <p id="msg" class="success"></p>
 
+<footer>
+  © 2025 Remo Tutoring Services
+</footer>
+
 </div>
 
 <script>
-
-const SCRIPT_URL = "PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE";
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec";
 
 document.getElementById("bookingForm").addEventListener("submit", function(e){
   e.preventDefault();
@@ -129,22 +145,26 @@ document.getElementById("bookingForm").addEventListener("submit", function(e){
   .then(res => res.json())
   .then(() =>{
     document.getElementById("msg").innerHTML =
-      "✅ Booking submitted successfully! You will be contacted soon.";
+      "✅ Booking submitted successfully! You’ll be contacted soon.";
 
     document.getElementById("bookingForm").reset();
 
-    // EMAIL NOTIFICATION
+    // Send email notification to YOU
     window.location.href =
-      `mailto:0641259472?subject=New Tutoring Booking&body=` +
-      `Name: ${data.name}%0D%0A` +
-      `Email: ${data.email}%0D%0A` +
-      `Subject: ${data.subject}%0D%0A` +
-      `Date: ${data.date}%0D%0A` +
-      `Time: ${data.time}%0D%0A` +
+      `mailto:info@your-email.com?subject=New Tutoring Booking&body=`+
+      `Name: ${data.name}%0D%0A`+
+      `Email: ${data.email}%0D%0A`+
+      `Subject: ${data.subject}%0D%0A`+
+      `Date: ${data.date}%0D%0A`+
+      `Time: ${data.time}%0D%0A`+
       `Notes: ${data.notes}`;
+  })
+  .catch(()=>{
+     alert("⚠️ Something went wrong. Please try again.");
   })
 });
 </script>
 
 </body>
 </html>
+
