@@ -2,63 +2,95 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Remo's Tutoring & Application Bookings</title>
+<title>Excellent Studies ZA — Book Tutoring</title>
 
 <style>
 body{
-  background:#f4f7fb;
-  font-family:Arial, sans-serif;
+  background:#ffffff;
+  font-family: Arial, sans-serif;
   margin:0;
   padding:20px;
 }
+
 .container{
   max-width:750px;
   margin:auto;
-  background:white;
+  background:#000000;
+  color:#ffffff;
   padding:25px;
   border-radius:10px;
-  box-shadow:0 0 15px rgba(0,0,0,0.12);
+  box-shadow:0 0 16px rgba(0,0,0,0.2);
 }
+
 h1{
   text-align:center;
+  margin-bottom:5px;
 }
+
 .tagline{
   text-align:center;
-  color:#555;
+  color:#cccccc;
+  margin-bottom:20px;
 }
+
 label{
   font-weight:bold;
+  display:block;
+  margin-top:5px;
 }
+
 input, textarea, select{
   width:100%;
   padding:10px;
-  margin:5px 0 10px;
+  margin:5px 0 12px;
   border-radius:6px;
-  border:1px solid #ccc;
+  border:none;
 }
+
+textarea{
+  height:80px;
+}
+
+select, input, textarea{
+  background:#f5f5f5;
+  color:#000000;
+}
+
+.note-box{
+  background:#111111;
+  padding:10px;
+  border-left:4px solid #ffffff;
+  font-size:14px;
+  margin-bottom:15px;
+}
+
 button{
   width:100%;
-  background:#22c55e;
-  color:white;
   padding:14px;
+  background:#ffffff;
+  color:#000000;
   border:none;
   border-radius:6px;
   font-size:16px;
   cursor:pointer;
-}
-button:hover{
-  background:#16a34a;
-}
-.success{
-  color:green;
   font-weight:bold;
-  text-align:center;
 }
+
+button:hover{
+  background:#dddddd;
+}
+
+.success{
+  color:#00ff7f;
+  text-align:center;
+  font-weight:bold;
+}
+
 footer{
   text-align:center;
   margin-top:15px;
   font-size:13px;
-  color:#666;
+  color:#cccccc;
 }
 </style>
 </head>
@@ -66,10 +98,21 @@ footer{
 <body>
 
 <div class="container">
-  <h1>📚 Book Your Tutoring Session</h1>
+
+  <h1>📚 Excellent Studies ZA</h1>
   <p class="tagline">
-    Maths • Physics • Science • Computer Studies • University Applications
+    Tutoring & University Application Assistance
   </p>
+
+  <div class="note-box">
+    📌 <strong>Important:</strong>  
+    In the <strong>NOTES</strong> section please tell us:
+    <ul>
+      <li>Your <strong>grade</strong> (e.g. Grade 10, Matric, 1st-year)</li>
+      <li>How many <strong>hours</strong> of tutoring you would like</li>
+    </ul>
+    Example: <em>Grade 11 — 2 hours Maths tutoring</em>
+  </div>
 
 <form id="bookingForm">
 
@@ -107,8 +150,8 @@ footer{
   <option>17:00</option>
 </select>
 
-<label>Notes (Optional)</label>
-<textarea id="notes"></textarea>
+<label>Notes (Grade + Number of Hours REQUIRED)</label>
+<textarea id="notes" placeholder="Example: Grade 11 — 2 hours Maths tutoring"></textarea>
 
 <button type="submit">✅ Book Session</button>
 
@@ -117,12 +160,13 @@ footer{
 <p id="msg" class="success"></p>
 
 <footer>
-  © 2025 Remo Tutoring Services
+  © 2025 Excellent Studies ZA
 </footer>
 
 </div>
 
 <script>
+
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec";
 
@@ -145,13 +189,13 @@ document.getElementById("bookingForm").addEventListener("submit", function(e){
   .then(res => res.json())
   .then(() =>{
     document.getElementById("msg").innerHTML =
-      "✅ Booking submitted successfully! You’ll be contacted soon.";
+      "✅ Booking sent successfully! We will contact you shortly.";
 
     document.getElementById("bookingForm").reset();
 
-    // Send email notification to YOU
+    // EMAIL NOTIFICATION TO OWNER
     window.location.href =
-      `mailto:info@your-email.com?subject=New Tutoring Booking&body=`+
+      `mailto:excellent.studies.za@gmail.com?subject=New Tutoring Booking&body=`+
       `Name: ${data.name}%0D%0A`+
       `Email: ${data.email}%0D%0A`+
       `Subject: ${data.subject}%0D%0A`+
@@ -160,11 +204,11 @@ document.getElementById("bookingForm").addEventListener("submit", function(e){
       `Notes: ${data.notes}`;
   })
   .catch(()=>{
-     alert("⚠️ Something went wrong. Please try again.");
+     alert("⚠️ Connection error — please try again.");
   })
 });
+
 </script>
 
 </body>
 </html>
-
