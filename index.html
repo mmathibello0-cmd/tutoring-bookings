@@ -137,7 +137,7 @@ button:hover{
   <a href="dashboard.html">Dashboard</a>
 </div>
 
-<form id="bookingForm" onsubmit="submitBooking()">
+<form id="bookingForm" onsubmit="submitBooking(event)">
 
 <label>Student Full Name</label>
 <input type="text" id="name" required>
@@ -174,7 +174,7 @@ button:hover{
 <label>Notes (Hours + Grade)</label>
 <textarea id="notes" placeholder="Example: Grade 11 · 2 hours weekly"></textarea>
 
-<button>✅ SUBMIT BOOKING</button>
+<button type="submit">✅ SUBMIT BOOKING</button>
 
 </form>
 
@@ -183,9 +183,7 @@ button:hover{
 <h3>💳 EFT Payment Details</h3>
 
 <p>
-Please make payment via **EFT or cash deposit** and email your proof of payment to:
-
-<br><br>
+Please make payment via <b>EFT or cash deposit</b> and email your proof of payment to:<br><br>
 <b>excellent.studies.za@gmail.com</b>
 </p>
 
@@ -216,7 +214,7 @@ Student Name + Subject
 
 <script>
 
-function submitBooking(){
+function submitBooking(event){
 
   event.preventDefault();
 
