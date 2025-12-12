@@ -1,197 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Excellent Studies ZA | Loyalty Dashboard</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Excellent Studies ZA — Admin Dashboard</title>
 <style>
-body{
-    font-family:Arial;
-    background:#fff;
-    padding:20px;
-}
-.container{
-    max-width:900px;
-    background:black;
-    color:white;
-    margin:auto;
-    padding:30px;
-    border-radius:12px;
-}
-h1{text-align:center;}
-a{
-    color:black;
-    background:white;
-    padding:6px 12px;
-    border-radius:6px;
-    text-decoration:none;
-    margin:4px;
-}
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:15px;
-}
-th, td{
-    border:1px solid white;
-    padding:8px;
-    text-align:left;
-}
-th{background:#222;}
-td{background:#111;}
-label{margin-right:6px;}
-input, select{
-    padding:4px 6px;
-    border-radius:6px;
-    border:none;
-    margin:0 4px;
-}
-.filter-container{
-    text-align:center;
-    margin-top:15px;
-    margin-bottom:15px;
-}
+  body{font-family:Arial,Helvetica,sans-serif;background:#f7f7f7;margin:0;padding:18px}
+  .wrap{max-width:1100px;margin:18px auto}
+  .card{background:#000;color:#fff;padding:16px;border-radius:12px;margin-bottom:14px}
+  table{width:100%;border-collapse:collapse}
+  th,td{padding:8px;border:1px solid #ddd;background:#fff;color:#000}
+  th{background:#eee}
+  .filter{margin:8px 0}
+  input,select{padding:8px;border-radius:6px;border:none}
 </style>
 </head>
 <body>
+<div class="wrap">
+  <h1 style="text-align:center">Admin Dashboard</h1>
+  <div id="authBox" class="card">
+    <p>Enter admin password to continue.</p>
+    <input id="admPw" type="password" placeholder="Password" />
+    <button onclick="checkPw()">Enter</button>
+    <p style="color:#ddd;margin-top:8px;font-size:13px">Hint: you set this in the page source (client-side). For stronger security use server auth.</p>
+  </div>
 
-<script>
-// Password protection
-const password = "Remoratile*0710"; // Change this to your secure password
-let attempt = prompt("Enter admin password to access dashboard:");
-if(attempt !== password){
-    alert("Incorrect password! Access denied.");
-    window.location.href = "index.html"; // redirect if wrong
-}
-</script>
+  <div id="main" style="display:none">
+    <div class="card">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <div>
+          <label>Filter by month: </label>
+          <input id="filterMonth" type="month" />
+        </div>
+        <div>
+          <label>Filter by subject: </label>
+          <select id="filterSubject">
+            <option value="">All</option>
+            <option>Mathematics</option>
+            <option>Mathematical Literacy</option>
+            <option>Accounting</option>
+            <option>Business Studies</option>
+            <option>Physical Science</option>
+            <option>Geography</option>
+            <option>Life Science</option>
+          </select>
+        </div>
+        <div style="margin-left:auto">
+          <button onclick="reload()">Reload Data</button>
+        </div>
+      </div>
+    </div>
 
-<div class="container">
+    <div class="card">
+      <h3>Clients Summary</h3>
+      <table id="clientsTable"><thead><tr><th>Name</th><th>Email</th><th>Total Sessions</th><th>Total Hours</th><th>2hr Sessions</th><th>Discount Eligible</th><th>Next Booking</th></tr></thead><tbody></tbody></table>
+    </div>
 
-<h1>🎯 Loyalty Tracking Dashboard</h1>
+    <div class="card">
+      <h3>All Bookings (raw)</h3>
+      <table id="bookingsTable"><thead><tr><th>Date</th><th>Time</th><th>Name</th><th>Email</th><th>Subject</th><th>Package</th><th>Amount</th></tr></thead><tbody></tbody></table>
+    </div>
 
-<div style="text-align:center;margin:10px 0;">
-    <a href="index.html">⬅ Back to Booking</a>
-    <a href="prices.html">💰 Prices</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-</div>
-
-<!-- Filters -->
-<div class="filter-container">
-<label>Filter by Month:</label>
-<input type="month" id="filterMonth">
-
-<label>Filter by Subject:</label>
-<select id="filterSubject">
-    <option value="">All Subjects</option>
-    <option>Mathematics</option>
-    <option>Mathematical Literacy</option>
-    <option>Accounting</option>
-    <option>Business Studies</option>
-    <option>Physical Science</option>
-    <option>Geography</option>
-    <option>Life Science</option>
-</select>
-</div>
-
-<table>
-<thead>
-<tr>
-<th>Student Name</th>
-<th>Email</th>
-<th>Total Sessions</th>
-<th>Discount Eligible?</th>
-<th>Next Booking</th>
-<th>Subject</th>
-</tr>
-</thead>
-<tbody id="dashboardBody">
-<tr><td colspan="6" style="text-align:center;">Loading...</td></tr>
-</tbody>
-</table>
-
+  </div>
 </div>
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec";
-const filterMonth = document.getElementById("filterMonth");
-const filterSubject = document.getElementById("filterSubject");
-let allData = [];
+// Client-side password (change if you like)
+const ADMIN_PASSWORD = "Excell2025";
 
-function loadDashboard(data){
-    const tbody = document.getElementById("dashboardBody");
-    tbody.innerHTML="";
-
-    const students = {};
-
-    data.forEach(entry => {
-        const entryDate = new Date(entry.date + " " + entry.time);
-        const monthFilter = filterMonth.value ? new Date(filterMonth.value + "-01") : null;
-        const subjectFilter = filterSubject.value;
-
-        // Skip if filters don't match
-        if(monthFilter && (entryDate.getMonth() !== monthFilter.getMonth() || entryDate.getFullYear() !== monthFilter.getFullYear())){
-            return;
-        }
-        if(subjectFilter && entry.subject !== subjectFilter){
-            return;
-        }
-
-        const email = entry.email;
-        if(!students[email]){
-            students[email] = {
-                name: entry.name,
-                email: email,
-                sessions: 0,
-                nextBooking: entry.date + " " + entry.time,
-                subjects:[entry.subject]
-            };
-        } else {
-            if(!students[email].subjects.includes(entry.subject)){
-                students[email].subjects.push(entry.subject);
-            }
-        }
-        students[email].sessions +=1;
-
-        const currentNext = new Date(students[email].nextBooking);
-        if(entryDate < currentNext){
-            students[email].nextBooking = entry.date + " " + entry.time;
-        }
-    });
-
-    for(const key in students){
-        const s = students[key];
-        const discountEligible = s.sessions >=5 ? "Yes (15% OFF)" : "No";
-        const row = document.createElement("tr");
-        row.innerHTML = `<td>${s.name}</td>
-                         <td>${s.email}</td>
-                         <td>${s.sessions}</td>
-                         <td>${discountEligible}</td>
-                         <td>${s.nextBooking}</td>
-                         <td>${s.subjects.join(", ")}</td>`;
-        tbody.appendChild(row);
-    }
-
-    if(Object.keys(students).length === 0){
-        tbody.innerHTML="<tr><td colspan='6' style='text-align:center;'>No matching records</td></tr>";
-    }
+function checkPw(){
+  const v = document.getElementById("admPw").value;
+  if(v === ADMIN_PASSWORD){
+    document.getElementById("authBox").style.display = "none";
+    document.getElementById("main").style.display = "block";
+    loadBookings();
+  } else {
+    alert("Incorrect password");
+  }
 }
 
-// Re-load dashboard when filters change
-filterMonth.addEventListener("change",()=>loadDashboard(allData));
-filterSubject.addEventListener("change",()=>loadDashboard(allData));
+let allData = [];
 
-fetch(SCRIPT_URL)
-.then(res=>res.json())
-.then(data=>{
-    allData = data;
-    loadDashboard(allData);
-})
-.catch(err=>{
-    document.getElementById("dashboardBody").innerHTML="<tr><td colspan='6'>Error loading data</td></tr>";
-    console.error(err);
-});
+async function loadBookings(){
+  document.querySelector("#clientsTable tbody").innerHTML = "<tr><td colspan='7'>Loading...</td></tr>";
+  document.querySelector("#bookingsTable tbody").innerHTML = "<tr><td colspan='7'>Loading...</td></tr>";
+  try {
+    const res = await fetch(SCRIPT_URL + "?type=getBookings");
+    const data = await res.json(); // expecting array of booking objects
+    allData = Array.isArray(data) ? data : [];
+    renderAll(allData);
+  } catch(e){
+    console.warn("Could not fetch bookings from script — falling back to empty", e);
+    allData = [];
+    renderAll(allData);
+  }
+}
+
+function reload(){ loadBookings(); }
+
+function renderAll(data){
+  // apply filters
+  const monthVal = document.getElementById("filterMonth").value;
+  const subjVal = document.getElementById("filterSubject").value;
+
+  const filtered = data.filter(entry => {
+    if(monthVal){
+      const [y,m] = monthVal.split("-");
+      if(!entry.date) return false;
+      const d = new Date(entry.date);
+      if(d.getFullYear() !== Number(y) || (d.getMonth()+1) !== Number(m)) return false;
+    }
+    if(subjVal && entry.subject !== subjVal) return false;
+    return true;
+  });
+
+  // populate bookings table
+  const bt = document.querySelector("#bookingsTable tbody");
+  bt.innerHTML = "";
+  filtered.forEach(b=>{
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${escapeHtml(b.date||"")}</td><td>${escapeHtml(b.time||"")}</td><td>${escapeHtml(b.name||"")}</td><td>${escapeHtml(b.email||"")}</td><td>${escapeHtml(b.subject||"")}</td><td>${escapeHtml(b.package||"")}</td><td>${escapeHtml(b.amount||"")}</td>`;
+    bt.appendChild(tr);
+  });
+  if(filtered.length===0) bt.innerHTML="<tr><td colspan='7'>No bookings found</td></tr>";
+
+  // aggregate by client
+  const clients = {};
+  filtered.forEach(b=>{
+    const key = (b.email||"noemail").toLowerCase();
+    if(!clients[key]) clients[key] = { name: b.name||"", email: b.email||"", sessions:0, hours:0, twoHrSessions:0, nextBooking: null };
+    clients[key].sessions += 1;
+    // estimate hours: if package contains '2 Hour' or '2-hour' assume 2 otherwise 1; monthly package = 4 hours per month? For simplicity check package string
+    const pk = (b.package||"").toLowerCase();
+    let hrs = 1;
+    if(pk.includes("2 hour") || pk.includes("2-hour") || pk.includes("2 hour")) hrs = 2;
+    if(pk.includes("monthly package")) hrs = 4; // 1hr/week * 4
+    if(pk.includes("group")) hrs = 8; // 2hr/week * 4 weeks (approx)
+    clients[key].hours += hrs;
+    if(hrs === 2) clients[key].twoHrSessions +=1;
+
+    const entryDate = b.date ? new Date(b.date + " " + (b.time||"00:00")) : null;
+    if(entryDate){
+      if(!clients[key].nextBooking || entryDate < clients[key].nextBooking) clients[key].nextBooking = entryDate;
+    }
+  });
+
+  // render clients
+  const ct = document.querySelector("#clientsTable tbody");
+  ct.innerHTML = "";
+  Object.values(clients).forEach(c=>{
+    const discountEligible = (c.twoHrSessions >= 5) ? "Yes (15% OFF)" : "No";
+    const nb = c.nextBooking ? c.nextBooking.toLocaleString() : "-";
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${escapeHtml(c.name)}</td><td>${escapeHtml(c.email)}</td><td>${c.sessions}</td><td>${c.hours}</td><td>${c.twoHrSessions}</td><td>${discountEligible}</td><td>${nb}</td>`;
+    ct.appendChild(tr);
+  });
+
+  if(Object.keys(clients).length === 0){
+    ct.innerHTML = "<tr><td colspan='7'>No clients found</td></tr>";
+  }
+}
+
+function escapeHtml(s){ return String(s||"").replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
 </script>
-
 </body>
 </html>
-
