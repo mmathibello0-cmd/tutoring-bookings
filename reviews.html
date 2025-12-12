@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Excellent Studies ZA — Reviews</title>
+<style>
+  body{font-family:Arial,Helvetica,sans-serif;background:#f7f7f7;margin:0;padding:18px}
+  .wrap{max-width:900px;margin:18px auto}
+  .card{background:#000;color:#fff;padding:16px;border-radius:12px;margin-bottom:14px}
+  input,textarea{width:100%;padding:10px;border-radius:8px;border:none}
+  button{padding:10px 14px;border-radius:10px;border:none;background:#fff;color:#000;font-weight:700;cursor:pointer}
+  .review{background:#fff;color:#000;padding:12px;border-radius:8px;margin-bottom:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 style="text-align:center">⭐ Student Reviews</h1>
+
+  <div class="card">
+    <h3>Leave a review</h3>
+    <input id="rname" placeholder="Your name" /><br><br>
+    <textarea id="rtext" placeholder="Write your review..." rows="4"></textarea><br><br>
+    <button onclick="submitReview()">Submit Review</button>
+    <p class="small" style="color:#ddd;margin-top:8px">Reviews are stored and shown publicly. Please be respectful.</p>
+  </div>
+
+  <div id="reviewsList"></div>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec";
+
+async function loadReviews(){
+  // Try to fetch reviews from your Apps Script (if it supports reading).
+  // If not, we fallback to localStorage.
+  let remoteOK = false;
+  try {
+    const res = await fetch(SCRIPT_URL + "?type=getReviews");
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length>0) {
+        renderReviews(data);
+        remoteOK = true;
+      }
+    }
+  } catch(e){ console.warn("Remote reviews load failed", e); }
+
+  if (!remoteOK) {
+    const local = JSON.parse(localStorage.getItem("reviews") || "[]");
+    renderReviews(local);
+  }
+}
+
+function renderReviews(list){
+  const container = document.getElementById("reviewsList");
+  container.innerHTML = "";
+  if (!list || list.length === 0) {
+    container.innerHTML = "<p>No reviews yet — be the first to leave one!</p>";
+    return;
+  }
+  list.slice().reverse().forEach(r => {
+    const div = document.createElement("div");
+    div.className = "review";
+    div.innerHTML = `<strong>${escapeHtml(r.name)}</strong><p>${escapeHtml(r.text)}</p>`;
+    container.appendChild(div);
+  });
+}
+
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+
+async function submitReview(){
+  const name = document.getElementById("rname").value.trim();
+  const text = document.getElementById("rtext").value.trim();
+  if(!name || !text) return alert("Please enter name & review");
+
+  // Try to save remotely first
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ type: "review", name, text })
+    });
+    if (res.ok) {
+      // remote saved: reload
+      document.getElementById("rname").value = "";
+      document.getElementById("rtext").value = "";
+      loadReviews();
+      return;
+    }
+  } catch(e){
+    console.warn("Remote save failed, saving locally", e);
+  }
+
+  // Fallback to localStorage
+  const reviews = JSON.parse(localStorage.getItem("reviews") || "[]");
+  reviews.push({ name, text, created: (new Date()).toISOString() });
+  localStorage.setItem("reviews", JSON.stringify(reviews));
+  document.getElementById("rname").value = "";
+  document.getElementById("rtext").value = "";
+  loadReviews();
+}
+
+// initial load
+loadReviews();
+</script>
+</body>
+</html>
