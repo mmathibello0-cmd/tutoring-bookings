@@ -1,251 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Excellent Studies ZA | Book a Session</title>
-
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Excellent Studies ZA — Book a Session</title>
 <style>
-
-body{
-  background:#fff;
-  font-family:Arial, sans-serif;
-  padding:20px;
-}
-
-.container{
-  max-width:750px;
-  background:black;
-  color:white;
-  margin:auto;
-  padding:30px;
-  border-radius:14px;
-}
-
-h1{
-  text-align:center;
-  margin-bottom:4px;
-}
-
-.tagline{
-  text-align:center;
-  font-size:14px;
-  opacity:0.9;
-  margin-bottom:15px;
-}
-
-/* ---------- FORM ---------- */
-
-label{
-  font-weight:bold;
-  display:block;
-  margin-top:8px;
-}
-
-input, select, textarea{
-  width:100%;
-  padding:8px;
-  margin-top:4px;
-  border-radius:6px;
-  border:none;
-}
-
-textarea{
-  resize:vertical;
-}
-
-button{
-  background:white;
-  color:black;
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:12px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-  margin-top:12px;
-}
-
-button:hover{
-  background:#ddd;
-}
-
-/* ---------- NAVIGATION ---------- */
-
-.nav{
-  text-align:center;
-  margin-bottom:20px;
-}
-
-.nav a{
-  display:inline-block;
-  background:white;
-  color:black;
-  padding:10px 18px;
-  margin:5px;
-  border-radius:999px;
-  text-decoration:none;
-  font-weight:bold;
-  letter-spacing:0.5px;
-  transition:all 0.3s ease;
-  box-shadow:0 0 7px rgba(255,255,255,0.5);
-}
-
-.nav a:hover{
-  background:black;
-  color:white;
-  border:1px solid white;
-  transform:translateY(-3px);
-}
-
-.nav a.active{
-  background:black;
-  color:white;
-  border:2px solid white;
-}
-
-/* ---------- PAYMENT INFO ---------- */
-
-.notice{
-  background:#eee;
-  color:black;
-  padding:16px;
-  border-radius:14px;
-  margin-top:20px;
-  font-size:14px;
-}
-
-.notice h3{
-  text-align:center;
-  margin-top:0;
-}
-
+  body{font-family:Arial,Helvetica,sans-serif;background:#f7f7f7;margin:0;padding:18px;}
+  .container{max-width:820px;margin:18px auto;background:#000;color:#fff;padding:26px;border-radius:12px;}
+  h1{margin:0 0 6px;text-align:center}
+  .tagline{color:#ddd;text-align:center;margin-bottom:16px}
+  label{display:block;font-weight:700;margin:12px 0 6px}
+  input,select,textarea{width:100%;padding:10px;border-radius:8px;border:none}
+  textarea{min-height:90px;resize:vertical}
+  .nav{display:flex;gap:12px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+  .nav a{background:#fff;color:#000;padding:10px 16px;border-radius:999px;text-decoration:none;font-weight:700}
+  .btn{background:#fff;color:#000;border:none;padding:12px;border-radius:12px;font-weight:700;cursor:pointer;margin-top:14px;width:100%}
+  .notice{background:#fff;color:#000;padding:16px;border-radius:10px;margin-top:18px;font-size:14px}
+  .small{font-size:13px;color:#ccc}
 </style>
 </head>
-
 <body>
 
 <div class="container">
+  <h1>📚 Excellent Studies ZA</h1>
+  <div class="tagline">Helping students rise from struggle to success</div>
 
-<h1>📚 Excellent Studies ZA</h1>
-<div class="tagline">Helping students rise from struggle to success</div>
+  <div class="nav">
+    <a href="index.html">Book</a>
+    <a href="prices.html">Prices</a>
+    <a href="about.html">About</a>
+    <a href="reviews.html">Reviews</a>
+    <a href="dashboard.html">Admin</a>
+  </div>
 
-<div class="nav">
-  <a href="index.html" class="active">Book</a>
-  <a href="prices.html">Prices</a>
-  <a href="about.html">About</a>
-  <a href="dashboard.html">Dashboard</a>
-</div>
+  <form id="bookingForm" onsubmit="handleBooking(event)" autocomplete="off">
+    <label>Student Full Name</label>
+    <input id="name" required />
 
-<form id="bookingForm" onsubmit="submitBooking(event)">
+    <label>Email Address</label>
+    <input id="email" type="email" required />
 
-<label>Student Full Name</label>
-<input type="text" id="name" required>
+    <label>Select Subject</label>
+    <select id="subject" required>
+      <option>Mathematics</option>
+      <option>Mathematical Literacy</option>
+      <option>Accounting</option>
+      <option>Business Studies</option>
+      <option>Physical Science</option>
+      <option>Geography</option>
+      <option>Life Science</option>
+    </select>
 
-<label>Email Address</label>
-<input type="email" id="email" required>
+    <label>Select Package</label>
+    <select id="package" required onchange="updateAmount()">
+      <option value="110">Single Session – R110</option>
+      <option value="210">2 Hour Session – R210</option>
+      <option value="430">Monthly Package – R430</option>
+      <option value="2016">Group Monthly – R2016 (40% OFF)</option>
+      <option value="210">University Applications – R210</option>
+      <option value="5x2hr">5 × 2-hour sessions (15% OFF) — Jan–Feb 2026</option>
+    </select>
 
-<label>Select Subject</label>
-<select id="subject" required>
-  <option>Mathematics</option>
-  <option>Mathematical Literacy</option>
-  <option>Accounting</option>
-  <option>Business Studies</option>
-  <option>Physical Science</option>
-  <option>Geography</option>
-  <option>Life Science</option>
-</select>
+    <label>Session Date</label>
+    <input id="date" type="date" required />
 
-<label>Select Package</label>
-<select id="package" required>
-  <option>Single Session – R110</option>
-  <option>2 Hour Session – R210</option>
-  <option>Monthly Package – R430</option>
-  <option>Group Monthly – R2016 (40% OFF)</option>
-  <option>University Applications – R210</option>
-</select>
+    <label>Session Time</label>
+    <input id="time" type="time" required />
 
-<label>Session Date</label>
-<input type="date" id="date" required>
+    <label>Notes (Hours + Grade)</label>
+    <textarea id="notes" placeholder="Example: Grade 11 · 2 hours weekly"></textarea>
 
-<label>Session Time</label>
-<input type="time" id="time" required>
+    <button class="btn" type="submit">✅ Submit & Pay</button>
+    <div class="small" style="margin-top:8px">By clicking you will be prompted to pay via PayFast. Bookings are saved immediately.</div>
+  </form>
 
-<label>Notes (Hours + Grade)</label>
-<textarea id="notes" placeholder="Example: Grade 11 · 2 hours weekly"></textarea>
-
-<button type="submit">✅ SUBMIT BOOKING</button>
-
-</form>
-
-<div class="notice">
-
-<h3>💳 EFT Payment Details</h3>
-
-<p>
-Please make payment via <b>EFT or cash deposit</b> and email your proof of payment to:<br><br>
-<b>excellent.studies.za@gmail.com</b>
-</p>
-
-<hr>
-
-<p>
-<b>Bank:</b> Standard Bank<br>
-<b>Branch:</b> Centurion Lifes<br>
-<b>Branch Code:</b> 2645<br>
-<b>Account Holder:</b> Miss Reamogetsoe RRM Mokati<br>
-<b>Account Number:</b> 013876252<br>
-<b>Account Type:</b> Current<br>
-<b>SWIFT Code:</b> SBZAZAJJ
-</p>
-
-<p>
-<b>Payment Reference:</b><br>
-Student Name + Subject
-</p>
-
-<p style="text-align:center;">
-<i>Bookings are confirmed once proof of payment has been received.</i>
-</p>
-
-</div>
-
+  <div class="notice" id="eftBox">
+    <h3>💳 EFT Payment Details (if you prefer EFT)</h3>
+    <p>Please email proof of payment to: <b>excellent.studies.za@gmail.com</b></p>
+    <hr>
+    <p><b>Bank:</b> Standard Bank<br>
+       <b>Branch:</b> Centurion Lifes · <b>Branch Code:</b> 2645<br>
+       <b>Account Holder:</b> Miss Reamogetsoe RRM Mokati<br>
+       <b>Account Number:</b> 013876252 · <b>Type:</b> Current<br>
+       <b>SWIFT:</b> SBZAZAJJ</p>
+    <p><b>Payment reference:</b> StudentName + Subject</p>
+    <p style="text-align:center"><i>Bookings are confirmed once payment proof is received (EFT) or PayFast confirms payment.</i></p>
+  </div>
 </div>
 
 <script>
+/* ----------------- CONFIG ----------------- */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec";
+/* PayFast credentials you provided */
+const PAYFAST = {
+  merchant_id: "32900789",
+  merchant_key: "zp0c3sujcapba",
+  // If you later enable passphrase set it here
+  passphrase: "" ,
+  // pages you upload to your site
+  return_url: window.location.origin + "/pay-success.html",
+  cancel_url: window.location.origin + "/pay-cancel.html",
+  notify_url: SCRIPT_URL
+};
 
-function submitBooking(event){
-
-  event.preventDefault();
-
-  const data = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    subject: document.getElementById("subject").value,
-    package: document.getElementById("package").value,
-    date: document.getElementById("date").value,
-    time: document.getElementById("time").value,
-    notes: document.getElementById("notes").value
-  };
-
-  fetch("https://script.google.com/macros/s/AKfycbys08KAuNNsU6kY7n0CjyiHQ-5l02ocqvlOTTePCp-ces9wWYghPUbn6UO_d9u3CmZY/exec", {
-     method:"POST",
-     headers:{"Content-Type":"application/json"},
-     body: JSON.stringify(data)
-  })
-
-  .then(()=>{
-     alert("✅ Your booking has been sent!\n\nPlease complete your EFT payment and email your proof of payment.");
-     document.getElementById("bookingForm").reset();
-  })
-
-  .catch(()=>{
-     alert("⚠️ Error submitting booking. Please try again.");
-  });
-
+/* package mapping for amounts (R) */
+function computeAmountForPackage(value) {
+  if (value === "5x2hr") {
+    // 5 x 2-hour sessions at R210 each before discount = 5*210 = 1050
+    // 15% off
+    const raw = 5 * 210;
+    return (raw * (1 - 0.15)).toFixed(2);
+  }
+  return Number(value).toFixed(2);
 }
 
-</script>
+/* called when package field changes */
+function updateAmount(){
+  const pkg = document.getElementById("package").value;
+  // no visible amount field right now — we calculate on submit
+}
 
+/* ----------------- BOOKING FLOW -----------------
+1) Save booking to Google Apps Script (SCRIPT_URL)
+2) If that succeeds, open PayFast payment form (POST) in new tab/window
+3) If PayFast completes, PayFast will redirect to return_url and send IPN to notify_url
+-----------------------------------------------*/
+
+async function handleBooking(e){
+  e.preventDefault();
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const subject = document.getElementById("subject").value;
+  const pkg = document.getElementById("package").value;
+  const date = document.getElementById("date").value;
+  const time = document.getElementById("time").value;
+  const notes = document.getElementById("notes").value.trim();
+
+  if(!name || !email) { alert("Please provide name and email."); return; }
+
+  // determine amount and item_name
+  const amount = computeAmountForPackage(pkg);
+  const packageLabel = (pkg === "5x2hr") ? "5x 2-hour sessions (15% OFF)" : (document.querySelector("#package option:checked").textContent);
+
+  const booking = {
+    type: "booking",
+    name, email, subject, package: packageLabel,
+    date, time, notes,
+    amount
+  };
+
+  // Save booking to Google Apps Script (so you have a record even if pay flow fails)
+  try {
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(booking)
+    });
+  } catch(err) {
+    // still continue, but inform user
+    console.warn("Warning — booking save failed (will still attempt payment):", err);
+    alert("Warning: Could not save booking to sheet. Payment will proceed — please email proof of payment if needed.");
+  }
+
+  // Build PayFast form dynamically and submit to PayFast in new window
+  submitToPayFast({
+    amount,
+    item_name: `Excellent Studies ZA — ${packageLabel} — ${subject} — ${name}`,
+    name_first: name,
+    email_address: email
+  });
+}
+
+/* Create a form and POST to PayFast */
+function submitToPayFast({ amount, item_name, name_first, email_address }) {
+  // Create a new window so PayFast opens in a new tab
+  const paymentWindow = window.open("", "_blank");
+
+  // Build form
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = "https://www.payfast.co.za/eng/process";
+  form.target = "_self";
+
+  // Required fields
+  const fields = {
+    merchant_id: PAYFAST.merchant_id,
+    merchant_key: PAYFAST.merchant_key,
+    return_url: PAYFAST.return_url,
+    cancel_url: PAYFAST.cancel_url,
+    notify_url: PAYFAST.notify_url,
+    amount: amount,
+    item_name: item_name,
+    name_first: name_first,
+    email_address: email_address,
+    // currency default ZAR
+    currency: "ZAR"
+  };
+
+  // Append hidden inputs
+  Object.keys(fields).forEach(k => {
+    const i = document.createElement("input");
+    i.type = "hidden";
+    i.name = k;
+    i.value = fields[k];
+    form.appendChild(i);
+  });
+
+  // If you later want to calculate signature using passphrase, you can add it here.
+  // Append the form to the paymentWindow document and submit it
+  paymentWindow.document.body.appendChild(form);
+  form.submit();
+}
+
+/* Helper — prefill date with next available day */
+(function prefillDate(){
+  const dateEl = document.getElementById("date");
+  const d = new Date();
+  d.setDate(d.getDate()+1);
+  const iso = d.toISOString().split("T")[0];
+  dateEl.value = iso;
+})();
+</script>
 </body>
 </html>
